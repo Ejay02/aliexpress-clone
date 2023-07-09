@@ -25,7 +25,16 @@ Before running the application, make sure you have the following installed:
 
 ## Getting Started
 
-1. Clone the repository:
+1. Clone the repository: `https://github.com/Ejay02/aliexpress-clone.git` 
+2. Install dependencies: `npm install` 
+3. Start the development server: `npm run dev` 
+4. Open the provided local URL (e.g., `http://localhost:3000`) in a web browser.
 
-   ```bash
-   git clone https://github.com/Ejay02/aliexpress-clone.git
+
+## Build
+
+To build the project for production, run `npm run build`. This will generate optimized and minified files in the `dist` directory.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
