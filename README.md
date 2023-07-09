@@ -1,63 +1,31 @@
-# Nuxt 3 Minimal Starter
+# AliExpress Clone
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is an AliExpress clone built with Nuxt.js, Tailwind CSS, Stripe, Pinia, and Prisma.
 
-## Setup
+## Overview
 
-Make sure to install the dependencies:
+The AliExpress clone is a web application that aims to replicate the functionality and design of the popular e-commerce platform AliExpress. It allows users to browse and search for products, add them to their cart, and make payments using Stripe integration. The application also includes user authentication, product reviews, and order management.
 
-```bash
-# npm
-npm install
+## Features
 
-# pnpm
-pnpm install
+- Browse and search for products
+- Add products to cart
+- Make payments using Stripe
+- User authentication and registration
+- Product reviews and ratings
+- Order management and tracking
 
-# yarn
-yarn install
-```
+## Prerequisites
 
-## Development Server
+Before running the application, make sure you have the following installed:
 
-Start the development server on `http://localhost:3000`:
+- Node.js (version X.X.X)
+- NPM (version X.X.X) or Yarn (version X.X.X)
+- Prisma CLI (version X.X.X)
 
-```bash
-# npm
-npm run dev
+## Getting Started
 
-# pnpm
-pnpm run dev
+1. Clone the repository:
 
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+   ```bash
+   git clone https://github.com/Ejay02/aliexpress-clone.git
