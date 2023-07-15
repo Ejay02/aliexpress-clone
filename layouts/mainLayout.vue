@@ -173,7 +173,7 @@
 
 <script setup>
 import { navigateTo } from "nuxt/app";
-import { useUserStore } from "../stores/user";
+import { useUserStore } from "~/stores/user.js";
 
 const userStore = useUserStore();
 
