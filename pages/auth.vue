@@ -30,19 +30,19 @@
 </template>
 
 <script setup>
-const client = useSupabaseClient()
-const user = useSupabaseUser()
+const client = useSupabaseClient();
+const user = useSupabaseUser();
 
-import { navigateTo } from "nuxt/app"
+import { navigateTo } from "nuxt/app";
 
-watchEffect(()=> {
-  if(user.value){
-    return navigateTo('/')
+watchEffect(() => {
+  if (user.value) {
+    return navigateTo("/");
   }
-})
+});
 
 const login = async (prov) => {
-  const { data, error } = await client.auth.signInWithOauth({
+  const { data, error } = await client.auth.signInWithOAuth({
     provider: prov,
   });
 };
