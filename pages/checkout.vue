@@ -6,7 +6,7 @@
           <div class="bg-white rounded-lg p-4">
             <div class="text-xl font-semibold mb-2">Shiping Address</div>
 
-            <div v-if="true">
+            <div v-if="currentAddress && currentAddress.data">
               <NuxtLink
                 to="/address"
                 class="flex items-center pb-2 text-blue-500 hover:text-red-400"
@@ -23,40 +23,35 @@
                   <li class="flex items-center gap-2">
                     <div class="">Contact name:</div>
                     <div class="font-bold">
-                      TEST
-                      <!-- {{ currentAddress.data.name }} -->
+                      {{ currentAddress.data.name }}
                     </div>
                   </li>
                   <!-- address -->
                   <li class="flex items-center gap-2">
                     <div class="">Address:</div>
                     <div class="font-bold">
-                      TEST
-                      <!-- {{ currentAddress.data.address }} -->
+                      {{ currentAddress.data.address }}
                     </div>
                   </li>
                   <!-- zip code -->
                   <li class="flex items-center gap-2">
                     <div class="">Zip Code:</div>
                     <div class="font-bold">
-                      TEST
-                      <!-- {{ currentAddress.data.address }} -->
+                      {{ currentAddress.data.zipcode }}
                     </div>
                   </li>
                   <!-- City -->
                   <li class="flex items-center gap-2">
                     <div class="">City:</div>
                     <div class="font-bold">
-                      TEST
-                      <!-- {{ currentAddress.data.address }} -->
+                      {{ currentAddress.data.city }}
                     </div>
                   </li>
                   <!-- Country -->
                   <li class="flex items-center gap-2">
                     <div class="">Country:</div>
                     <div class="font-bold">
-                      TEST
-                      <!-- {{ currentAddress.data.address }} -->
+                      {{ currentAddress.data.country }}
                     </div>
                   </li>
                 </ul>
@@ -73,7 +68,7 @@
           </div>
 
           <div id="Items" class="bg-white rounded-lg p-4 mt-4">
-            <div v-for="product in products" :key="product.id">
+            <div v-for="product in userStore.checkout" :key="product">
               <CheckoutItem :product="product" />
             </div>
           </div>
@@ -138,7 +133,7 @@ import mainLayout from "../layouts/mainLayout.vue";
 import { useUserStore } from "../stores/user";
 
 const userStore = useUserStore();
-
+const user = useSupabaseUser();
 const route = useRoute();
 
 let stripe = null;
@@ -149,6 +144,27 @@ let total = ref(0);
 let clientSecret = null;
 let currentAddress = ref(null);
 let isProcessing = ref(false);
+
+onBeforeMount(async () => {
+  if (userStore.checkout.length < 1) {
+    return navigateTo("/shoppingcart");
+  }
+
+  total.value = 0.0;
+
+  if (user.value) {
+    currentAddress.value = await useFetch(
+      `/api/prisma/get-address-by-user/${user.value.id}`
+    );
+    setTimeout(() => (userStore.isLoading = false), 200);
+  }
+});
+
+watchEffect(() => {
+  if (route.fullPath == "/checkout" && !user.value) {
+    return navigateTo("/auth");
+  }
+});
 
 onMounted(() => {
   isProcessing.value = true;
@@ -174,22 +190,4 @@ const pay = async () => {};
 const createOrder = async (stripeId) => {};
 
 const showError = (errorMsgText) => {};
-
-const products = [
-  {
-    id: 1,
-    title: "Product 1",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    url: "https://picsum.photos/id/7/800/800",
-    price: 9.99,
-  },
-  {
-    id: 2,
-    title: "Product 2",
-    description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-    url: "https://picsum.photos/id/71/800/800",
-    price: 19.99,
-  },
-];
 </script>

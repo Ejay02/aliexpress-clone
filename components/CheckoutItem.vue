@@ -21,4 +21,5 @@
 <script setup>
 const props = defineProps(["product", "selectedArray"]);
 const { product } = toRefs(props);
+
 </script>

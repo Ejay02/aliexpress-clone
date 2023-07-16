@@ -1,12 +1,16 @@
 <template>
-  <main-layout>
+  <MainLayout>
     <div id="ShoppingCartPage" class="mt-4 max-w-[1200px] mx-auto px-2">
-      <div v-if="false" class="h-[500px] flex items-center justify-center">
+      <div
+        v-if="!userStore.cart.length"
+        class="h-[500px] flex items-center justify-center"
+      >
         <div class="pt-20">
           <img class="mx-auto" width="250" src="/cart-empty.png" />
 
           <div class="text-xl text-center mt-4">No items yet?</div>
-          <div v-if="true" class="flex text-center">
+
+          <div v-if="!user" class="flex text-center">
             <NuxtLink
               to="/auth"
               class="bg-[#FD374F] w-full text-white text-[21px] font-semibold p-1.5 rounded-full mt-4"
@@ -20,7 +24,9 @@
       <div v-else class="md:flex gap-4 justify-between mx-auto w-full">
         <div class="md:w-[65%]">
           <div class="bg-white rounded-lg p-4">
-            <div class="text-2xl font-bold mb-2">Shopping Cart (0)</div>
+            <div class="text-2xl font-bold mb-2">
+              Shopping Cart ({{ userStore.cart.length }})
+            </div>
           </div>
 
           <div class="bg-[#FEEEEF] rounded-lg p-4 mt-4">
@@ -30,7 +36,7 @@
           </div>
 
           <div id="Items" class="bg-white rounded-lg p-4 mt-4">
-            <div v-for="product in products" :key="product.id">
+            <div v-for="product in userStore.cart" :key="product">
               <CartItem
                 :product="product"
                 :selectedArray="selectedArray"
@@ -40,9 +46,8 @@
           </div>
         </div>
 
-        <div class="md:hidden block my-4"></div>
-
-        <div class="md:w[35%]">
+        <div class="md:hidden block my-4" />
+        <div class="md:w-[35%]">
           <div id="Summary" class="bg-white rounded-lg p-4">
             <div class="text-2xl font-extrabold mb-2">Summary</div>
             <div class="flex items-center justify-between my-4">
@@ -51,7 +56,6 @@
                 $ <span class="font-extrabold">{{ totalPriceComputed }}</span>
               </div>
             </div>
-
             <button
               @click="goToCheckout"
               class="flex items-center justify-center bg-[#FD374F] w-full text-white text-[21px] font-semibold p-1.5 rounded-full mt-4"
@@ -63,22 +67,30 @@
           <div id="PaymentProtection" class="bg-white rounded-lg p-4 mt-4">
             <div class="text-lg font-semibold mb-2">Payment methods</div>
             <div class="flex items-center justify-start gap-8 my-4">
-              <div v-for="card in cards" :key="card.id" class="">
-                <img :src="card" alt="" class="h-6" />
+              <div v-for="card in cards" :key="card">
+                <img class="h-6" :src="card" />
               </div>
             </div>
+
+            <div class="border-b" />
+
+            <div class="text-lg font-semibold mb-2 mt-2">Buyer Protection</div>
+            <p class="my-2">
+              Get full refund if the item is not as described or if is not
+              delivered
+            </p>
           </div>
         </div>
       </div>
     </div>
-  </main-layout>
+  </MainLayout>
 </template>
 
 <script setup>
-import mainLayout from "../layouts/mainLayout.vue";
-import { useUserStore } from "../stores/user";
-
+import MainLayout from "../layouts/mainLayout.vue";
+import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
+const user = useSupabaseUser();
 
 let selectedArray = ref([]);
 
@@ -90,9 +102,14 @@ const cards = ref(["visa.png", "mastercard.png", "paypal.png", "applepay.png"]);
 
 const totalPriceComputed = computed(() => {
   let price = 0;
-  userStore.cart.forEach((prod) => {
-    price += prod.price;
-  });
+
+  if (userStore.cart) {
+    userStore.cart.forEach((prod) => {
+      if (prod && prod.price) {
+        price += prod.price;
+      }
+    });
+  }
 
   return price / 100;
 });
@@ -126,22 +143,4 @@ const goToCheckout = () => {
 
   return navigateTo("/checkout");
 };
-
-const products = [
-  {
-    id: 1,
-    title: "Product 1",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    url: "https://picsum.photos/id/7/800/800",
-    price: 9.99,
-  },
-  {
-    id: 2,
-    title: "Product 2",
-    description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-    url: "https://picsum.photos/id/71/800/800",
-    price: 19.99,
-  },
-];
 </script>

@@ -12,7 +12,7 @@
             v-if="images[0] !== ''"
             class="flex items-center justify-center mt-2"
           >
-            <div v-for="image in images" :key="image.id">
+            <div v-for="image in images" :key="image">
               <img
                 @mouseover="currentImage = image"
                 @click="currentImage = image"
@@ -110,16 +110,18 @@ watchEffect(() => {
   }
 });
 
-// BUG
-/**Not adding to cart, not sure why */
 
 const isInCart = computed(() => {
   let res = false;
-  userStore.cart.forEach((prod) => {
-    if (route.params.id == prod.id) {
-      res = true;
-    }
-  });
+
+  if (userStore.cart && route.params && route.params.id) {
+    userStore.cart.forEach((prod) => {
+      if (prod && prod.id && route.params.id == prod.id) {
+        res = true;
+      }
+    });
+  }
+
   return res;
 });
 
